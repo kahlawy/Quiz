@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Queries</title>
+  <!-- Include VS Code theme for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/tomorrow-night.min.css">
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #1e1e1e; /* Dark background color similar to VS Code */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    pre {
+      font-size: 16px;
+      line-height: 1.5;
+      background-color: #2e2e2e; /* Slightly lighter background color */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+      color: #d4d4d4; /* Text color */
+    }
+  </style>
+  <!-- Include jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- Include highlight.js script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  <!-- Configure highlight.js to recognize MongoDB syntax -->
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<pre><code class="javascript">-------------------------------------------
+  SELECT Avg(salary)         AS averageSalary
+        FROM   employee 
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id : null,
+                averageSalary: { $avg: "$salary" }
+                }
+            }
+        ])
+-------------------------------------------
+  ///////////////////////////////////////////////////////
+-------------------------------------------
+  SELECT Avg(salary)         AS averageSalary,
+        Max(salary)         AS maxSalary,
+        Min(salary)         AS minSalary
+        FROM   employee 
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id : null,
+                averageSalary: { $avg: "$salary" },
+                maxSalary: { $max: "$salary" },
+                minSalary: { $min: "$salary" }
+                }
+            }
+        ])
+-------------------------------------------
+   ///////////////////////////////////////////////////////
+-------------------------------------------
+  SELECT Avg(salary)         AS averageSalary
+        FROM   employee 
+        WHERE dno=7
+-------------------------------------------
+      db.employee.aggregate([
+            {  $match: {"dno":7} },
+            {
+                $group : {
+                _id : null,
+                averageSalary: { $avg: "$salary" }
+                }
+            }
+        ])
+-------------------------------------------
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT sum(salary)         AS totalSalary
+        FROM   employee 
+        WHERE dno=7
+-------------------------------------------
+      db.employee.aggregate([
+            {  $match: {"dno":7} },
+            {
+                $group : {
+                _id : null,
+                totalSalary: {$sum: "$salary" }
+                }
+            }
+        ])
+-------------------------------------------
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT dno,
+        sum(salary)         AS totalSalary
+        FROM   employee 
+        GROUP BY    dno
+-------------------------------------------
+      db.employee.aggregate([
+            {
+                $group : {
+                _id : "$dno",
+                totalSalary: {$sum: "$salary" }
+                }
+            }
+        ])
+-------------------------------------------
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT dno,
+        sum(salary)         AS totalSalary
+        FROM   employee 
+        GROUP BY   dno
+        ORDER BY dno
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id : "$dno",
+                totalSalary: {$sum: "$salary" }
+                }
+            },
+            {
+                $sort:{"_id":1}
+            }
+        ])
+-------------------------------------------
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT dno,
+         gender,
+        sum(salary)         AS totalSalary
+        FROM   employee 
+        GROUP BY   dno, gender
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id :{dno_id: "$dno", gender_id:"$gender"},
+                totalSalary: {$sum: "$salary" }
+                }
+            }
+        ])
+-------------------------------------------
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT dno,
+        count(*)         AS count
+        FROM   employee 
+        GROUP BY   dno
+        
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id : "$dno",
+                count: {$sum: 1 }
+                }
+            } 
+        ])
+-------------------------------------------
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT dno,
+        count(*)         AS count
+        FROM   employee 
+        GROUP BY   dno
+        HAVING count(*)> 4
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id : "$dno",
+                count: {$sum: 1 }
+                }
+            },
+            {$match:{count:{$gt:4} } }
+        ])
+-------------------------------------------
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+  SELECT dno,
+        count(*)         AS count
+        FROM   employee 
+        GROUP BY   dno
+        HAVING count(*)> 4
+        ORDER BY dno
+-------------------------------------------
+        db.employee.aggregate([
+            {
+                $group : {
+                _id : "$dno",
+                count: {$sum: 1 }
+                }
+            },
+            {$match:{count:{$gt:4} } },
+            {
+                $sort:{"_id":1}
+            }
+        ])
+-------------------------------------------
+///////////////////////////////////////////////////////
+
+------------------------------------------- 
+        SELECT *, employee_dept
+        FROM   employee
+        WHERE employee_dept IN (
+        SELECT *
+        FROM department
+        WHERE dnumber = employee.dno
+        );
+
+-------------------------------------------
+       db.employee.aggregate( [
+            {
+                $lookup:
+                {
+                    from: "department",
+                    localField: "dno",
+                    foreignField: "dnumber",
+                    as: "employee_dept"
+                }
+            }
+         ] )
+//Performs a left outer join to an unsharded collection in the same database to filter
+ in documents from the "joined" collection for processing. To each input document, 
+ the $lookup stage adds a new array field whose elements are the matching documents 
+ from the "joined" collection. The $lookup stage passes these reshaped documents to 
+ the next stage.
+-------------------------------------------
+
+
+///////////////////////////////////////////////////////
+
+-------------------------------------------
+
+use("company");
+db.employee.aggregate( [
+            {
+                $lookup:
+                {
+                    from: "department",
+                    localField: "dno",
+                    foreignField: "dnumber",
+                    as: "employee_dept"
+                }
+            }
+         ] )
+///////////////////////////////////////////////////////
+use("company");
+db.department.aggregate( [
+            {
+                $lookup:
+                {
+                    from: "employee",
+                    localField: "mgrssn",
+                    foreignField: "ssn",
+                    as: "dept_manager"
+                }
+            },
+            {
+                $lookup:
+                {
+                    from: "dept_locations",
+                    localField: "dnumber",
+                    foreignField: "dnumber",
+                    as: "dept_location"
+                }
+            }
+         ] )
+///////////////////////////////////////////////////////
+
+    
+use("company");
+       db.employee.aggregate( [
+            {
+                $lookup:
+                {
+                    from: "department",
+                    localField: "dno",
+                    foreignField: "dnumber",
+                    as: "employee_dept"
+                }
+            },
+            { $project: { "_id": 0, "date": 0 } } 
+         ] )
+
+ 
+
+             
+       
+
+ 
+
+///////////////////////////////////////////////////////
+$project
+
+{ $project: { "<field1>": 0, "<field2>": 1, ... } }  
+
+-------------------------------------------
+
+       db.employee.aggregate( [
+            {
+                $lookup:
+                {
+                    from: "department",
+                    localField: "dno",
+                    foreignField: "dnumber",
+                    as: "employee_dept"
+                }
+            },
+            { $project: { "_id": 0, "fname": 0 } } 
+         ] )
+
+-------------------------------------------
+///////////////////////////////////////////////////////
+
+db.employee.aggregate( [
+   {  $match: {dno:{$ne:7}} },
+   { $project: { "_id": 0, "fname": 0 } } 
+] )
+
+-------------------------------------------
+///////////////////////////////////////////////////////
+
+</code></pre>
+
+<!-- jQuery script for executing MongoDB queries -->
+<script>
+  $(document).ready(function() {
+    // Function to execute MongoDB queries using AJAX
+    function executeQuery(query) {
+      $.ajax({
+        type: "POST",
+        url: "/execute-mongodb-query",  // Replace with the actual server endpoint
+        contentType: "application/json",
+        data: JSON.stringify({ query: query }),
+        success: function(response) {
+          console.log("Query executed successfully:", response);
+          // You can update the UI or perform other actions based on the response
+        },
+        error: function(error) {
+          console.error("Error executing query:", error);
+          // Handle errors, update UI, or show error messages
+        }
+      });
+    }
+
+    // Example: Execute a MongoDB query when the page loads
+    var exampleQuery = `db.people.find({ "name": "Ali" })`;
+    executeQuery(exampleQuery);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/Kahlawy/Desktop/Master/Html/code3.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Queries</title>
+  <!-- Include VS Code theme for syntax highlighting -->
+  <link rel="stylesheet" href="./code1_files/tomorrow-night.min.css">
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #1e1e1e; /* Dark background color similar to VS Code */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    pre {
+      font-size: 16px;
+      line-height: 1.5;
+      background-color: #2e2e2e; /* Slightly lighter background color */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+      color: #d4d4d4; /* Text color */
+    }
+  </style>
+  <!-- Include jQuery library -->
+  <script src="./code1_files/jquery-3.6.4.min.js.download"></script>
+  <!-- Include highlight.js script -->
+  <script src="./code1_files/highlight.min.js.download"></script>
+  <!-- Configure highlight.js to recognize MongoDB syntax -->
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<pre><code class="javascript hljs"><span class="hljs-comment">// MongoDB Queries</span>
+    <span class="hljs-comment">/////////////////////////////////////////////////////////////////////////</span>
+use(<span class="hljs-string">'company'</span>);
+
+db.employee.drop();
+
+db.people.insertOne({ <span class="hljs-string">"ssn"</span>:<span class="hljs-number">1</span>, <span class="hljs-string">"name"</span>:<span class="hljs-string">"Ali"</span>,<span class="hljs-string">"age"</span>:<span class="hljs-number">20</span>})
+
+db.createCollection(<span class="hljs-string">"people2"</span>)
+
+db.people2.insertOne({ <span class="hljs-string">"_id"</span>: <span class="hljs-number">1</span>,<span class="hljs-string">"ssn"</span>:<span class="hljs-number">12</span>, <span class="hljs-string">"name"</span>:<span class="hljs-string">"ali"</span>,<span class="hljs-string">"age"</span>:<span class="hljs-string">"20"</span>})
+
+db.sales.insertMany([
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">11</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'abc'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">2</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-03-01T08:00:00Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">12</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'jkl'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">20</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-03-01T09:00:00Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">13</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'xyz'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-03-15T09:00:00Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">14</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'xyz'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'quantity'</span>:  <span class="hljs-number">20</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-04-04T11:21:39.736Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">15</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'abc'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-04-04T21:23:13.331Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">16</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'def'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">7.5</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2015-06-04T05:08:13Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">17</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'def'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">7.5</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2015-09-10T08:43:00Z'</span>) },
+  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">18</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'abc'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2016-02-06T20:20:13Z'</span>) },
+]);
+
+
+db.sales.updateMany ( { } ,
+  { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"start_date"</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( ) } } )             
+
+db.sales.updateMany ({},{<span class="hljs-attr">$unset</span>:{<span class="hljs-string">"start_date"</span>:<span class="hljs-string">""</span>} })
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:<span class="hljs-number">13</span>} ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( ) } } )
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:<span class="hljs-number">13</span>} ,
+ { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
+
+db.sales.updateMany ( {<span class="hljs-string">'_id'</span>:<span class="hljs-number">12</span> } ,
+  { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"item"</span> : <span class="hljs-string">"abcdefg"</span> } } )
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gt</span>:<span class="hljs-number">17</span>}} ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"item"</span> : <span class="hljs-string">"abcdefgh"</span>} } )
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">16</span>}} ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"item"</span> : <span class="hljs-string">"abcdefgh"</span>} } )
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$ne</span>:<span class="hljs-number">13</span>}} ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( ) } } )
+
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$lt</span>:<span class="hljs-number">13</span>} } ,
+ { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
+
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$lte</span>:<span class="hljs-number">14</span>} } ,
+ { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
+
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$lte</span>:<span class="hljs-number">14</span>} } ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( )} } )
+
+
+<span class="hljs-comment">//and//</span>
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>} } ,
+ { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
+
+
+
+db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>} } ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
+
+
+
+<span class="hljs-comment">//or//</span>
+db.sales.updateMany ( {<span class="hljs-attr">$or</span>: [{<span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>}},{<span class="hljs-attr">price</span>:<span class="hljs-number">7.5</span>}] } ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
+
+
+
+<span class="hljs-comment">//and//</span>
+db.sales.updateMany ( {<span class="hljs-attr">$and</span>: [{<span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>}},{<span class="hljs-attr">price</span>:<span class="hljs-number">7.5</span>}] } ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
+
+
+<span class="hljs-comment">//exists//</span>
+db.sales.updateMany ( { <span class="hljs-string">"join_date"</span>:{<span class="hljs-attr">$exists</span>:<span class="hljs-literal">false</span>} } ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">start_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
+
+
+
+<span class="hljs-comment">//and//</span>
+db.sales.updateMany ( {<span class="hljs-attr">$or</span>: [{<span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>}},{<span class="hljs-attr">price</span>:<span class="hljs-number">7.5</span>},{<span class="hljs-attr">quantity</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">10</span>}}] } ,
+ { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">end_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
+
+
+</code></pre>
+
+<!-- jQuery script for executing MongoDB queries -->
+<script>
+  $(document).ready(function() {
+    // Function to execute MongoDB queries using AJAX
+    function executeQuery(query) {
+      $.ajax({
+        type: "POST",
+        url: "/execute-mongodb-query",  // Replace with the actual server endpoint
+        contentType: "application/json",
+        data: JSON.stringify({ query: query }),
+        success: function(response) {
+          console.log("Query executed successfully:", response);
+          // You can update the UI or perform other actions based on the response
+        },
+        error: function(error) {
+          console.error("Error executing query:", error);
+          // Handle errors, update UI, or show error messages
+        }
+      });
+    }
+
+    // Example: Execute a MongoDB query when the page loads
+    var exampleQuery = `db.people.find({ "name": "Ali" })`;
+    executeQuery(exampleQuery);
+  });
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Queries</title>
+  <!-- Include VS Code theme for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/tomorrow-night.min.css">
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #1e1e1e; /* Dark background color similar to VS Code */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    pre {
+      font-size: 16px;
+      line-height: 1.5;
+      background-color: #2e2e2e; /* Slightly lighter background color */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+      color: #d4d4d4; /* Text color */
+    }
+  </style>
+  <!-- Include jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <!-- Include highlight.js script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  <!-- Configure highlight.js to recognize MongoDB syntax -->
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<pre><code class="javascript">//in MongoDB, indexes are special data structures that store some information related to 
+  the documents such that it becomes easy for MongoDB to find the right data file. The indexes are ordered by 
+  the value of the field specified in the index. So, MongoDB provides a createIndex() method to create one or 
+  more indexes on collections. Using this method we can create different types of indexes like text index, 2dsphere 
+  index, 2d index, etc. It takes three parameters first one is a document that contains the field and value
+   pairs where the field is the index key and the value describes the type of index for that field and others are optional.
+     //A document that contains the field and value pairs where the field is the index key and the value describes the type
+      of index for that field. For an ascending index on a field, specify a value of 1; for descending index, specify a value of -1.
+  //db.collection.createIndex(keys, options, commitQuorum)
+  
+  
+  db.employee.createIndex({"ssn":1} )
+  
+  
+  
+  
+  db.employee.insertOne(
+  {"fname":'aaa',"minit":'B',"lname":'Bender',"ssn":'666666600',"bdate": new Date('1968-04-17'),
+  "address":'8794 Garfield, Chicago, IL',"gender":'M',"salary":96000.00,"superssn":null,"dno":8  })
+  
+  
+  
+  
+  db.department.createIndex({"dnumber":1} ,{unique: true})
+  
+  
+  
+   db.department.insertMany([
+   { 'dname':'Research','dnumber':5,'mgrssn':'333445555','date': new Date('1978-05-22') },
+   { 'dname':'Administration','dnumber':4,'mgrssn':'987654321','date': new Date('1985-01-01') }
+   ])       // error
+  
+  
+  
+  
+  db.department.dropIndex("dnumber_1")
+  
+  
+  
+   db.department.insertMany([
+   { 'dname':'Research','dnumber':5,'mgrssn':'333445555','date': new Date('1978-05-22') },
+   { 'dname':'Administration','dnumber':4,'mgrssn':'987654321','date': new Date('1985-01-01') }
+   ]) 
+   
+  
+  
+  db.department.insertOne( { 'dname':'Research','dnumber':5,'mgrssn':'333445555','date': new Date('1978-05-22') })
+  
+  
+  
+  db.department.createIndex({"dnumber":1} ,{unique: true})     //error
+  
+  
+  
+  db.project.createIndex( { pnumber: 1, Pname: -1 } ,
+   { name: "pno_name" } )
+  
+  
+  
+  db.project.getIndexes()
+  
+  
+  
+  db.project.dropIndex("pno_name")
+  
+  
+  
+  db.project.createIndex( { pnumber: 1, Pname: -1 } ,
+   { name: "pno_name", unique: true })
+  
+  
+  
+  db.project.getIndexes()
+  
+  
+  
+  db.project.insertMany([
+  {"pname":'ProductX',"pnumber":1,"plocation":'Bellaire',"dnum":5}, 
+  {"pname":'ProductY',"pnumber":2,"plocation":'Sugarland',"dnum":5}
+  ]) //error
+  
+  ////////////////////////////////////////////////////////////////////////////
+  
+  // delete one 
+  //To delete the first document from the project collection where  "pnumber" = "1":
+  db.project.deleteOne( { "pnumber": 1 } )
+  
+  
+  
+  
+  //Delete All Documents
+  //To delete all documents from a collection, pass an empty filter document {} to the db.collection.deleteMany() method.
+  db.sales.deleteMany({})
+  
+  
+  
+  
+  //To delete all documents from the project collection where the plocation equals "Stafford":
+  db.project.deleteMany( { "plocation": "Stafford" } )
+  
+  
+  
+  
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //db.collection.find(query, projection)
+  //////
+  //Projection              Description
+  //<field>: <1 or true>    Specifies the inclusion of a field. Non-zero integers are also treated as true.
+  //<field>: <0 or false>   Specifies the exclusion of a field.
+  
+  
+  
+  
+  db.employee.find()
+  
+  
+  
+  db.employee.findOne()
+  
+  
+  
+  
+  db.employee.find({"dno": 8})
+  
+  
+  
+  db.employee.find({},{"_id":1,"fname":1,"lname":1})
+  
+  
+  
+  db.employee.find({},{"_id":0,"fname":1,"lname":1})
+  
+  
+  
+  db.employee.find({"dno": "8"},{"_id":0,"fname":1,"lname":1})
+  
+  
+  db.employee.find({"dno": 8},{"_id":0,"fname":1,"lname":1})
+  
+  
+  
+  db.employee.find({"dno": {$ne: 8}},{"_id":0,"fname":1,"lname":1})
+  
+  
+  
+  db.employee.find( { $or:[{"dno": 8},{"gender": "M"}]    },
+  {"_id":0,"fname":1,"lname":1, "dno":1,"gender":1})
+  
+  
+  
+  db.employee.find( { $or:[{"dno": "8"},{"gender": "m"}]    },
+  {"_id":0,"fname":1,"lname":1, "dno":1,"gender":1})
+  
+  
+  
+  db.employee.find( { $or:[{"dno": 8},{"gender": "m"}]    },
+  {"_id":0,"fname":1,"lname":1, "dno":1,"gender":1})
+  
+  
+  
+  db.employee.find( { $or:[{"dno": "8"},{"gender": "M"}]    },
+  {"_id":0,"fname":1,"lname":1, "dno":1,"gender":1})
+  
+  
+  
+  db.employee.find( { $or:[{"dno":{$gte:7} },{"gender": "M"}]    },
+  {"_id":0,"fname":1,"lname":1, "dno":1,"gender":1})
+  
+  
+  
+  
+  db.employee.find( { "dno":{ $gte:4, $lte:6}    },
+  {"_id":0,"fname":1,"lname":1, "dno":1})
+  
+  
+  
+  /////////////////////////////////
+  db.employee.find({"dno": 8})
+  
+  db.employee.find({"dno": 8}).limit(1)
+  
+  
+  
+  db.employee.find({"dno": 8}).limit(3)
+  
+  
+  
+  db.employee.find({"dno": 8},{ "ssn":1, "fname":1, "dno":1}).limit(3)
+  
+  
+  db.employee.find({"dno": 8},{"_id":0, "ssn":1, "fname":1, "dno":1}).limit(3)
+  
+  
+  
+  db.employee.find({"dno": 8},{"_id":0, "ssn":1, "fname":1, "dno":1}).limit(3)
+  /////////////////////////////////
+  /// sort // ASC
+  db.employee.find({"dno": 8}, { "fname":1,"lname":1,"dno":1,"salary":1})
+  .sort({"salary":1})
+  
+  
+  
+  /// sort // DESC
+  db.employee.find({"dno": 8}, { "fname":1,"lname":1,"dno":1,"salary":1})
+  .sort({"salary":-1})
+  
+  /////////////////////////////////
+  ///count
+  db.employee.count()
+  
+  
+  db.employee.find().count()
+  
+  db.employee.find({"dno": 8}).count()
+
+</code></pre>
+
+<!-- jQuery script for executing MongoDB queries -->
+<script>
+  $(document).ready(function() {
+    // Function to execute MongoDB queries using AJAX
+    function executeQuery(query) {
+      $.ajax({
+        type: "POST",
+        url: "/execute-mongodb-query",  // Replace with the actual server endpoint
+        contentType: "application/json",
+        data: JSON.stringify({ query: query }),
+        success: function(response) {
+          console.log("Query executed successfully:", response);
+          // You can update the UI or perform other actions based on the response
+        },
+        error: function(error) {
+          console.error("Error executing query:", error);
+          // Handle errors, update UI, or show error messages
+        }
+      });
+    }
+
+    // Example: Execute a MongoDB query when the page loads
+    var exampleQuery = `db.people.find({ "name": "Ali" })`;
+    executeQuery(exampleQuery);
+  });
+</script>
+
+</body>
+</html>
