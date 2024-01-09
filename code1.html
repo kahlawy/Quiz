@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)file:///C:/Users/Kahlawy/Desktop/Master/Html/code3.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MongoDB Queries</title>
   <!-- Include VS Code theme for syntax highlighting -->
-  <link rel="stylesheet" href="./code1_files/tomorrow-night.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/tomorrow-night.min.css">
   <style>
     body {
       font-family: 'Courier New', monospace;
@@ -30,106 +30,104 @@
     }
   </style>
   <!-- Include jQuery library -->
-  <script src="./code1_files/jquery-3.6.4.min.js.download"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <!-- Include highlight.js script -->
-  <script src="./code1_files/highlight.min.js.download"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
   <!-- Configure highlight.js to recognize MongoDB syntax -->
   <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
 
-<pre><code class="javascript hljs"><span class="hljs-comment">// MongoDB Queries</span>
-    <span class="hljs-comment">/////////////////////////////////////////////////////////////////////////</span>
-use(<span class="hljs-string">'company'</span>);
+<pre><code class="javascript">use('company');
 
-db.employee.drop();
-
-db.people.insertOne({ <span class="hljs-string">"ssn"</span>:<span class="hljs-number">1</span>, <span class="hljs-string">"name"</span>:<span class="hljs-string">"Ali"</span>,<span class="hljs-string">"age"</span>:<span class="hljs-number">20</span>})
-
-db.createCollection(<span class="hljs-string">"people2"</span>)
-
-db.people2.insertOne({ <span class="hljs-string">"_id"</span>: <span class="hljs-number">1</span>,<span class="hljs-string">"ssn"</span>:<span class="hljs-number">12</span>, <span class="hljs-string">"name"</span>:<span class="hljs-string">"ali"</span>,<span class="hljs-string">"age"</span>:<span class="hljs-string">"20"</span>})
-
-db.sales.insertMany([
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">11</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'abc'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">2</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-03-01T08:00:00Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">12</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'jkl'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">20</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-03-01T09:00:00Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">13</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'xyz'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-03-15T09:00:00Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">14</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'xyz'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'quantity'</span>:  <span class="hljs-number">20</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-04-04T11:21:39.736Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">15</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'abc'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2014-04-04T21:23:13.331Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">16</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'def'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">7.5</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2015-06-04T05:08:13Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">17</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'def'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">7.5</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2015-09-10T08:43:00Z'</span>) },
-  { <span class="hljs-string">'_id'</span>: <span class="hljs-number">18</span>, <span class="hljs-string">'item'</span>: <span class="hljs-string">'abc'</span>, <span class="hljs-string">'price'</span>: <span class="hljs-number">10</span>, <span class="hljs-string">'quantity'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'date'</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2016-02-06T20:20:13Z'</span>) },
-]);
-
-
-db.sales.updateMany ( { } ,
-  { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"start_date"</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( ) } } )             
-
-db.sales.updateMany ({},{<span class="hljs-attr">$unset</span>:{<span class="hljs-string">"start_date"</span>:<span class="hljs-string">""</span>} })
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:<span class="hljs-number">13</span>} ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( ) } } )
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:<span class="hljs-number">13</span>} ,
- { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
-
-db.sales.updateMany ( {<span class="hljs-string">'_id'</span>:<span class="hljs-number">12</span> } ,
-  { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"item"</span> : <span class="hljs-string">"abcdefg"</span> } } )
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gt</span>:<span class="hljs-number">17</span>}} ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"item"</span> : <span class="hljs-string">"abcdefgh"</span>} } )
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">16</span>}} ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-string">"item"</span> : <span class="hljs-string">"abcdefgh"</span>} } )
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$ne</span>:<span class="hljs-number">13</span>}} ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( ) } } )
-
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$lt</span>:<span class="hljs-number">13</span>} } ,
- { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
-
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$lte</span>:<span class="hljs-number">14</span>} } ,
- { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
-
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$lte</span>:<span class="hljs-number">14</span>} } ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> ( )} } )
-
-
-<span class="hljs-comment">//and//</span>
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>} } ,
- { <span class="hljs-attr">$unset</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
-
-
-
-db.sales.updateMany ( { <span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>} } ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
-
-
-
-<span class="hljs-comment">//or//</span>
-db.sales.updateMany ( {<span class="hljs-attr">$or</span>: [{<span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>}},{<span class="hljs-attr">price</span>:<span class="hljs-number">7.5</span>}] } ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-string">""</span>} } )
-
-
-
-<span class="hljs-comment">//and//</span>
-db.sales.updateMany ( {<span class="hljs-attr">$and</span>: [{<span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>}},{<span class="hljs-attr">price</span>:<span class="hljs-number">7.5</span>}] } ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">join_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
-
-
-<span class="hljs-comment">//exists//</span>
-db.sales.updateMany ( { <span class="hljs-string">"join_date"</span>:{<span class="hljs-attr">$exists</span>:<span class="hljs-literal">false</span>} } ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">start_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
-
-
-
-<span class="hljs-comment">//and//</span>
-db.sales.updateMany ( {<span class="hljs-attr">$or</span>: [{<span class="hljs-string">"_id"</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">14</span>, <span class="hljs-attr">$lte</span>:<span class="hljs-number">16</span>}},{<span class="hljs-attr">price</span>:<span class="hljs-number">7.5</span>},{<span class="hljs-attr">quantity</span>:{<span class="hljs-attr">$gte</span>:<span class="hljs-number">10</span>}}] } ,
- { <span class="hljs-attr">$set</span> : { <span class="hljs-attr">end_date</span> : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()} } )
-
+  db.employee.drop();
+  
+  db.people.insertOne({ "ssn":1, "name":"Ali","age":20})
+  
+  db.createCollection("people2")
+  
+  db.people2.insertOne({ "_id": 1,"ssn":12, "name":"ali","age":"20"})
+  
+  db.sales.insertMany([
+    { '_id': 11, 'item': 'abc', 'price': 10, 'quantity': 2, 'date': new Date('2014-03-01T08:00:00Z') },
+    { '_id': 12, 'item': 'jkl', 'price': 20, 'quantity': 1, 'date': new Date('2014-03-01T09:00:00Z') },
+    { '_id': 13, 'item': 'xyz', 'price': 5, 'quantity': 10, 'date': new Date('2014-03-15T09:00:00Z') },
+    { '_id': 14, 'item': 'xyz', 'price': 5, 'quantity':  20, 'date': new Date('2014-04-04T11:21:39.736Z') },
+    { '_id': 15, 'item': 'abc', 'price': 10, 'quantity': 10, 'date': new Date('2014-04-04T21:23:13.331Z') },
+    { '_id': 16, 'item': 'def', 'price': 7.5, 'quantity': 5, 'date': new Date('2015-06-04T05:08:13Z') },
+    { '_id': 17, 'item': 'def', 'price': 7.5, 'quantity': 10, 'date': new Date('2015-09-10T08:43:00Z') },
+    { '_id': 18, 'item': 'abc', 'price': 10, 'quantity': 5, 'date': new Date('2016-02-06T20:20:13Z') },
+  ]);
+  
+  
+  db.sales.updateMany ( { } ,
+    { $set : { "start_date" : new Date ( ) } } )             
+  
+  db.sales.updateMany ({},{$unset:{"start_date":""} })
+  
+  db.sales.updateMany ( { "_id":13} ,
+   { $set : { join_date : new Date ( ) } } )
+  
+  db.sales.updateMany ( { "_id":13} ,
+   { $unset : { join_date : ""} } )
+  
+  db.sales.updateMany ( {'_id':12 } ,
+    { $set : { "item" : "abcdefg" } } )
+  
+  db.sales.updateMany ( { "_id":{$gt:17}} ,
+   { $set : { "item" : "abcdefgh"} } )
+  
+  db.sales.updateMany ( { "_id":{$gte:16}} ,
+   { $set : { "item" : "abcdefgh"} } )
+  
+  db.sales.updateMany ( { "_id":{$ne:13}} ,
+   { $set : { join_date : new Date ( ) } } )
+  
+  
+  db.sales.updateMany ( { "_id":{$lt:13} } ,
+   { $unset : { join_date : ""} } )
+  
+  
+  db.sales.updateMany ( { "_id":{$lte:14} } ,
+   { $unset : { join_date : ""} } )
+  
+  
+  db.sales.updateMany ( { "_id":{$lte:14} } ,
+   { $set : { join_date : new Date ( )} } )
+  
+  
+  //and//
+  db.sales.updateMany ( { "_id":{$gte:14, $lte:16} } ,
+   { $unset : { join_date : ""} } )
+  
+  
+  
+  db.sales.updateMany ( { "_id":{$gte:14, $lte:16} } ,
+   { $set : { join_date : new Date()} } )
+  
+  
+  
+  //or//
+  db.sales.updateMany ( {$or: [{"_id":{$gte:14, $lte:16}},{price:7.5}] } ,
+   { $set : { join_date : ""} } )
+  
+  
+  
+  //and//
+  db.sales.updateMany ( {$and: [{"_id":{$gte:14, $lte:16}},{price:7.5}] } ,
+   { $set : { join_date : new Date()} } )
+  
+  
+  //exists//
+  db.sales.updateMany ( { "join_date":{$exists:false} } ,
+   { $set : { start_date : new Date()} } )
+  
+  
+  
+  //and//
+  db.sales.updateMany ( {$or: [{"_id":{$gte:14, $lte:16}},{price:7.5},{quantity:{$gte:10}}] } ,
+   { $set : { end_date : new Date()} } )
+  
 
 </code></pre>
 
@@ -160,6 +158,5 @@ db.sales.updateMany ( {<span class="hljs-attr">$or</span>: [{<span class="hljs-s
   });
 </script>
 
-
-
-</body></html>
+</body>
+</html>
